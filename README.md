@@ -1,2 +1,8 @@
 # SCI
-SCI Project - PHP 
+
+MASTER = Vulnerable application
+
+SUPER MASTER = Safe application
+
+
+@Vinny
