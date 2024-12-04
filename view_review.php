@@ -2,6 +2,11 @@
 session_start();
 require 'config.php';
 
+if (!isset($_SESSION['username'])) {
+    echo "You must be logged in to add a review!";
+    exit;
+}
+
 // Display all restaurant reviews
 $result = $db->query("SELECT * FROM reviews");
 

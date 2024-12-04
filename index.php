@@ -35,6 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <h3> Dont have account? </h3>
 <h4> Please Register with us now </h4>
 <form action="register.php" method="GET">
-    <button type="submit" value="Register"> Click  here </button>
+    <button type="submit" value="Register"> - -  REGISTER HERE - -  </button>
 </form>
 

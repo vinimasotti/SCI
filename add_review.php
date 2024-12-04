@@ -7,9 +7,17 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+if (isset($_GET['logout'])) { // Logout button functionality
+    session_destroy();
+    header("Location: index.php"); // Redirect to index page
+    exit;
+}
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $restaurant_name = $_POST['restaurant_name'];  // No input validation
+
     $review = $_POST['review'];  // Vulnerable to XSS as no sanitization is done
+
     $rating = $_POST['rating'];  // No validation, possible SQL injection
 
     // Vulnerable: SQL Injection risk due to lack of prepared statements
@@ -29,10 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </form>
 <br>
 
+
+<br>
+<h2> Want to see the reviews?  </h2>
+<h3> Please click on the button below </h3>
+<form action="view_review.php" method="GET">
+    <button type="submit" value="reviews"> Reviews submitted</button>
 </form>
 <br>
-<h3> Want to see the reviews?  </h3>
-<h4> Please click on the button below </h4>
-<form action="view_review.php" method="GET">
-    <button type="submit" value="Register"> Reviews submitted</button>
+<h4> To logout click below <h4>
+<form method="GET" action="">
+    <button type="submit" name="logout" value="1">Log Out</button>
 </form>

@@ -6,7 +6,7 @@ require 'config.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];  // No sanitization, vulnerable to XSS
     $password = $_POST['password'];  // No sanitization, password stored insecurely
-    $role = 'customer';  // Default role for all registrants
+    $role = 'user';  // Default role for all registrants
 
     // Hash the password (better practice but still missing rate limits and password complexity checks)
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);

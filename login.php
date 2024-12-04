@@ -3,10 +3,12 @@ session_start();
 require 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];  // Vulnerable to SQL Injection
+    $username = $_POST['username'];  //  Vulnerable to SQL Injection
     $password = $_POST['password'];  // No sanitization or password policy
-        $password = htmlspecialchars ($_POST['password'], ENT_QUOTES, 'UTF-8')
-
+      //  $password = htmlspecialchars ($_POST['password'], ENT_QUOTES, 'UTF-8') 
+      //  $username = htmlspecialchars ($_POST['password'], ENT_QUOTES, 'UTF-8')
+        
+        //
     // Vulnerable to SQL Injection due to lack of prepared statements
     $sql = "SELECT * FROM users WHERE username = '$username'";
     $result = $db->query($sql);  // Direct SQL execution without validation
@@ -25,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<h1>Login VULNERABLE</h1>
+<h1>Login </h1>
 <form method="POST">
     Username: <input type="text" name="username" required><br>
     Password: <input type="password" name="password" required><br>
