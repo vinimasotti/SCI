@@ -9,7 +9,9 @@ if (!isset($_SESSION['username'])) {
 
 if (isset($_GET['logout'])) { // Logout button functionality
     session_destroy();
+    
     header("Location: index.php"); // Redirect to index page
+    echo "Logged out of Review";
     exit;
 }
 
@@ -35,17 +37,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     Rating: <input type="number" name="rating" min="1" max="5" required><br>
     <input type="submit" value="Submit Review">
 </form>
-<br>
 
 
-<br>
 <h2> Want to see the reviews?  </h2>
 <h3> Please click on the button below </h3>
 <form action="view_review.php" method="GET">
-    <button type="submit" value="reviews"> Reviews submitted</button>
+    <button type="submit" value="reviews"> -- VIEW REVIEWS --</button>
 </form>
-<br>
+
 <h4> To logout click below <h4>
 <form method="GET" action="">
-    <button type="submit" name="logout" value="1">Log Out</button>
+    <button type="submit" name="logout" value="1">-- LOG OUT HERE --</button>
 </form>

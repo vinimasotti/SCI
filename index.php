@@ -5,6 +5,7 @@ require 'config.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];  // Vulnerable to SQL Injection
     $password = $_POST['password'];  // No sanitization or password policy
+    
 
     // Vulnerable to SQL Injection due to lack of prepared statements
     $sql = "SELECT * FROM users WHERE username = '$username'";

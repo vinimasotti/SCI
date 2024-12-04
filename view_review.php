@@ -18,3 +18,5 @@ while ($row = $result->fetchArray()) {
     echo "<p><strong>By:</strong> " . $row['customer'] . "</p><hr>";
 }
 ?>
+
+<button onclick="window.location.href='add_review.php';"> Back  </button>
