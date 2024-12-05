@@ -23,6 +23,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $review = htmlspecialchars(trim($_POST['review']), ENT_QUOTES, 'UTF-8');  
     // same patter as before
 
+    if (!preg_match('/^[^\s]{2,25}$/', $restaurant_name)) {
+        echo "Restaurant name must be between 2 and 25 characters and cannot contain spaces.";
+        exit;
+    }
+    if (strlen($review) < 2 || strlen($review) > 240 || empty($review)) {
+        echo "Review must be between 2 and 240 characters.";
+        exit;
+    }
+
     $rating = filter_var($_POST['rating'], FILTER_VALIDATE_INT, [
     //validating on server side rating 1-5
     //on the client side is 
@@ -40,11 +49,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+
 <h1>Add a Restaurant Review</h1>
 <form method="POST">
-    Restaurant Name: <input type="text" name="restaurant_name" required><br>
-    Review: <textarea name="review" required></textarea><br>
-<!-- 1 to 5 is rendering on client side -->
+    <!-- limiting the max user input to not flood -->
+    Restaurant Name: <input type="text" name="restaurant_name" minlength="2" maxlength="25" required><br>
+     <!-- blocking white space submits input to not enter space on databases -->
+   <pattern=".*\S.*" title="Cannot be blank or only spaces" required><br>
+
+    Review: <textarea name="review" minlength="5" maxlength="240" required></textarea><br>
+    <pattern=".*\S.*" title="Cannot be blank or only spaces" required></textarea><br>
+
+<!-- boundary 1 to 5 is rendering on client side - applied on server side as well-->
     Rating: <input type="number" name="rating" min="1" max="5" required><br>
     <input type="submit" value="Submit Review">
 </form>
@@ -53,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <form action="view_review.php" method="GET">
     <button type="submit" value="reviews"> -- VIEW REVIEWS --</button>
 </form>
+
 <!-- user botton to logout the application -->
 <h4> To logout click below <h4>
 <form method="GET" action="">

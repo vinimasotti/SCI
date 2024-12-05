@@ -6,12 +6,6 @@ if (!isset($_SESSION['username'])) {
     echo "You must be logged in to see this page";
     exit;
 
-    if (isset($_GET['logout'])) {
-        session_destroy();
-        header("Location: index.php"); // Redirect to index page
-        echo "Logged out";//success message
-        exit;
-    }
 }
 
 // Display all restaurant reviews
