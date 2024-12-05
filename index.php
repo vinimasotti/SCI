@@ -3,7 +3,9 @@ session_start();
 require 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];  // Vulnerable to SQL Injection
+    // Vulnerable to SQL Injection 
+    $username = htmlspecialchars(trim($_POST['username']), ENT_QUOTES, 'UTF-8');   
+
     $password = $_POST['password'];  // No sanitization or password policy
     
 
