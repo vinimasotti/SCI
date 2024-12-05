@@ -4,25 +4,19 @@ require 'config.php';
 
 //add a password validation
 function CheckifisValidPassword($password) {
-    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password);
+    return preg_match('/^(?=.*[A-Z])(?=.*[a-z])(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/', $password);
 }
 
 // Allow customers to register
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = $_POST['username'];  // No sanitization, vulnerable to XSS
-    $password = $_POST['password'];  // No sanitization, password stored insecurely
-    
-
-    if (empty($username) || empty($password)) {
-        echo "Username and password are required.";
-        exit;
-    }
+    // No sanitization, vulnerable to XSSsuper
+    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));  
+    $password = $_POST['password'];  // Minimum 8 letters, special character and upper case
 
     if (!CheckifisValidPassword($password)) { // user:customer1 password:12345678Aa!
         echo "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
         exit;
     }
-
     $role = 'customer';  // Default role for all registrants there are is jsut one admin on the application id = 1
 
     // Hash the password (better practice but still missing rate limits and password complexity checks)

@@ -3,8 +3,15 @@ session_start();
 require 'config.php';
 
 if (!isset($_SESSION['username'])) {
-    echo "You must be logged in to add a review!";
+    echo "You must be logged in to see this page";
     exit;
+
+    if (isset($_GET['logout'])) {
+        session_destroy();
+        header("Location: index.php"); // Redirect to index page
+        echo "Logged out";//success message
+        exit;
+    }
 }
 
 // Display all restaurant reviews
@@ -19,4 +26,8 @@ while ($row = $result->fetchArray()) {
 }
 ?>
 
+<!-- onclick is not a good write practice because can be easy bypassed by a guessing -->
 <button onclick="window.location.href='add_review.php';"> Back  </button>
+
+
+
