@@ -1,4 +1,8 @@
 <?php
+
+// Block all iframe embedding for anti-hijacking, yellow flag on ZAP SCAN
+header("X-Frame-Options: DENY"); 
+ 
 class MyDB extends SQLite3 {
     function __construct() {
         $this->open('restaurant_reviews.db');  // Database file name

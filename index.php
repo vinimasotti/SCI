@@ -3,10 +3,14 @@ session_start();
 require 'config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Vulnerable to SQL Injection 
-    $username = htmlspecialchars(trim($_POST['username']), ENT_QUOTES, 'UTF-8');   
+    // Code changed - Tampering medium risk 
+    //username does not accept special characters, password yes
+    //$username = htmlspecialchars(trim($_POST['username']), ENT_QUOTES, 'UTF-8');   
+    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));  
 
-    $password = $_POST['password'];  // No sanitization or password policy
+    $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
+
+    //insecure code - $password = $_POST['password'];   No sanitization or password policy
     
 
     // Vulnerable to SQL Injection due to lack of prepared statements
@@ -26,6 +30,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<!-- head added for good practices in HTML language
+ CONTENT SECURITY POLICY to not allow any user input on html language  -->
+ <head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self';">
+
+</head>
+
 
 <h1>Welcome to the Review Website</h1>
 <h2> Insert your username and password </h2>

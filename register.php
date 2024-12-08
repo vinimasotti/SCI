@@ -11,7 +11,8 @@ function CheckifisValidPassword($password) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // No sanitization, vulnerable to XSSsuper
     $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));  
-    $password = $_POST['password'];  // Minimum 8 letters, special character and upper case
+    $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
+  // Minimum 8 letters, special character and upper case
 
     if (!CheckifisValidPassword($password)) { // user:customer1 password:12345678Aa!
         echo "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.";
@@ -29,6 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "Customer registered successfully!";
 }
 ?>
+<!-- head added for good practices in HTML language
+ CONTENT SECURITY POLICY to not allow any user input on html language  -->
+ <head>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+<meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self';">
+
+</head>
 
 <h1>Register as a Customer</h1>
 <form method="POST">
