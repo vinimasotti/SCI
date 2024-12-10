@@ -1,4 +1,31 @@
 <?php
+	header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';");
+    header("X-content-Type-Options: nosniff");
+    //cookie managament
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_samesite', 'Strict'); // mitigating against cross-site forgery
+
+
+session_set_cookie_params([
+    'lifetime' => time() +3000, //expire in 3000 seconds or when browser close
+    'path' => '/',   //default path
+    'domain' => '/',
+    'secure' => false, //not using HTTPS
+    'httponly' => true,
+    'samesite' => 'strict', //samesite policy
+]);
+
+setcookie(
+    'test_cookie',
+    'test_value',
+
+    [
+        'expires' => time () + 3000,
+        'path' => '/',
+        'secure' => false,
+        'httponly' => true,
+    ]
+    );
 session_start();
 require 'config.php';
 
@@ -15,7 +42,7 @@ if (isset($_GET['logout'])) {
 }
 
 // Implemented a session timeout
-$timeout_session = 20; // 5 minutes = 300 seconds
+$timeout_session = 120; // 5 minutes = 300 seconds
 if (isset($_SESSION['last_activity'])) {
     // Calculate the time since the last activity
     $elapsed_time = time() - $_SESSION['last_activity'];
@@ -56,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]
     ]);  
 
-    // Vulnerable: SQL Injection risk due to lack of prepared statements
+    // Vuln erable: SQL Injection risk due to lack of prepared statements
     $sql = "INSERT INTO reviews (restaurant_name, review, rating, customer) VALUES ('$restaurant_name', '$review', '$rating', '".$_SESSION['username']."')";
     $db->exec($sql);  // Direct SQL execution with unsanitized user input
     echo "Review added!";
@@ -64,17 +91,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 <!-- head added for good practices in HTML language
  CONTENT SECURITY POLICY to not allow any user input on html language  -->
-<head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self';">
-</head>
+ <meta http-equiv="Content-Security-Policy" content="default-src 'self'; ">
 <!-- head added CONTENT SECURITY POLICY  -->
 
 <h1>Add a Restaurant Review</h1>
 <form method="POST">
     <!-- limiting the max user input to not flood -->
-    Restaurant Name: <input type="text" name="restaurant_name" minlength="2" maxlength="25" required><br>
+    Restaurant Name: <textarea type="text" name="restaurant_name" minlength="2" maxlength="25" required></textarea><br>
      <!-- blocking white space submits input to not enter space on databases -->
-   <pattern=".*\S.*" title="Cannot be blank or only spaces" required><br>
+   <pattern=".*\S.*" title="Cannot be blank or only spaces" required></textarea><br>
 
     Review: <textarea name="review" minlength="5" maxlength="240" required></textarea><br>
     <pattern=".*\S.*" title="Cannot be blank or only spaces" required></textarea><br>

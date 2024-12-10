@@ -1,4 +1,29 @@
 <?php
+	header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';");
+    header("X-content-Type-Options: nosniff");
+//cookie managament
+ini_set('session.cookie_httponly', 1);
+session_set_cookie_params([
+    'lifetime' => time() +3000, //expire in 3000 seconds or when browser close
+    'path' => '/',   //default path
+    'domain' => '/',
+    'secure' => false, //not using HTTPS
+    'httponly' => true,
+    'samesite' => 'strict', //samesite policy
+]);
+
+setcookie(
+    'test_cookie',
+    'test_value',
+
+    [
+        'expires' => time () + 3000,
+        'path' => '/',
+        'secure' => false,
+        'httponly' => true,
+    ]
+    );
+
 session_start();
 require 'config.php';
 
@@ -16,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_review_id'])) 
     
     // Check if the user is allowed to delete this review
     $stmt = $db->prepare("SELECT customer FROM reviews WHERE id = :id");
-    $stmt->bindValue(':id', $reviw_id, SQLITE3_INTEGER);
+    $stmt->bindValue(':id', $review_id, SQLITE3_INTEGER);
     $result = $stmt->execute();
     $review = $result->fetchArray(SQLITE3_ASSOC);
 

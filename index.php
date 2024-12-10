@@ -1,18 +1,44 @@
 <?php
+	header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';");
+    header("X-content-Type-Options: nosniff");
+
+//cookie managament
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_samesite', 'Strict'); // mitigating against cross-site forgery
+
+session_set_cookie_params([
+    'lifetime' => time() +3000, //expire in 3000 seconds or when browser close
+    'path' => '/',   //default path
+    'domain' => '/',
+    'secure' => false, //not using HTTPS
+    'httponly' => true,
+    'samesite' => 'strict', //samesite policy
+]);
+
+setcookie(
+    'test_cookie',
+    'test_value',
+
+    [
+        'expires' => time () + 3000,
+        'path' => '/',
+        'secure' => false,
+        'httponly' => true,
+    ]
+    );
+
 session_start();
 require 'config.php';
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Code changed - Tampering medium risk 
-    //username does not accept special characters, password yes
-    //$username = htmlspecialchars(trim($_POST['username']), ENT_QUOTES, 'UTF-8');   
+
     $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));  
 
     $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
 
     //insecure code - $password = $_POST['password'];   No sanitization or password policy
-    
-
     // Vulnerable to SQL Injection due to lack of prepared statements
     $sql = "SELECT * FROM users WHERE username = '$username'";
     $result = $db->query($sql);  // Direct SQL execution without validation
@@ -33,9 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <!-- head added for good practices in HTML language
  CONTENT SECURITY POLICY to not allow any user input on html language  -->
  <head>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self';">
-<meta http-equiv="Content-Security-Policy" content="frame-ancestors 'self';">
-
+<meta http-equiv="Content-Security-Policy" content="default-src 'self';">     
 </head>
 
 

@@ -2,7 +2,9 @@
 
 // Block all iframe embedding for anti-hijacking, yellow flag on ZAP SCAN
 header("X-Frame-Options: DENY"); 
- 
+
+
+
 class MyDB extends SQLite3 {
     function __construct() {
         $this->open('restaurant_reviews.db');  // Database file name
@@ -22,7 +24,7 @@ if(!$db) {
 $db->exec("
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL UNIQUE COLLATE NOCASE, -- Case insensitive usernames
+        username TEXT NOT NULL UNIQUE COLLATE NOCASE CHECK (length(username) >= 2 AND length(username) <= 25), -- Limiting characters, -- Case insensitive usernames
         password TEXT NOT NULL,
         role TEXT NOT NULL CHECK (role IN ('admin', 'customer')) -- Only accept 'admin' or 'customer'
     )

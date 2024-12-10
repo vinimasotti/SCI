@@ -1,5 +1,32 @@
 <?php
-session_start();
+//CSP settled to default
+	header("Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self';");
+    header("X-content-Type-Options: nosniff");
+//cookie managament
+ini_set('session.cookie_httponly', 1);
+ini_set('session.cookie_samesite', 'Strict'); // mitigating against cross-site forgery
+
+session_set_cookie_params([
+    'lifetime' => time() +3000, //expire in 3000 seconds or when browser close
+    'path' => '/',   //default path
+    'domain' => '/',
+    'secure' => false, //not using HTTPS
+    'httponly' => true,
+    'samesite' => 'strict', //samesite policy
+     'Max-age' => 1--
+]);
+
+setcookie(
+    'test_cookie',
+    'test_value',
+    [
+        'expires' => time () + 3000,
+        'path' => '/',
+        'secure' => false,
+        'httponly' => true,
+    ]
+    );
+    
 require 'config.php';
 
 //add a password validation
@@ -10,7 +37,10 @@ function CheckifisValidPassword($password) {
 // Allow customers to register
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // No sanitization, vulnerable to XSSsuper
-    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING));  
+    $username = trim(filter_input(INPUT_POST, 'username', FILTER_SANITIZE_STRING)); 
+    if (strlen($username) < 2 || strlen($username) > 25) {
+        die("Username must be between 2 and 25 characters.");
+    } 
     $password = trim(filter_input(INPUT_POST, 'password', FILTER_SANITIZE_STRING));
   // Minimum 8 letters, special character and upper case
 
