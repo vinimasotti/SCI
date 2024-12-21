@@ -80,10 +80,10 @@ while ($row = $result->fetchArray()) {
     echo "<hr>";
 }
 ?>
-<!-- head added for good practices in HTML language
- CONTENT SECURITY POLICY to not allow any user input on html language  -->
-<!-- onclick is not a good write practice because can be easy bypassed by a guessing -->
-<button onclick="window.location.href='add_review.php';"> Back  </button>
+<!-- onclick button is a bad practice -->
+<!-- <button onclick="window.location.href='add_review.php';"> Back  </button> -->
 
 
-
+<a href="add_review.php">
+    <button type="button">Back</button>
+</a>

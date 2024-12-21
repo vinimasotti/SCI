@@ -13,7 +13,7 @@ session_set_cookie_params([
     'secure' => false, //not using HTTPS
     'httponly' => true,
     'samesite' => 'strict', //samesite policy
-     'Max-age' => 1--
+
 ]);
 
 setcookie(
@@ -76,4 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </form>
 <br>
 <br>
-<button onclick="window.location.href='index.php';"> Back  </button>
+<!-- not good code <button onclick="window.location.href='index.php';"> Back  </button> -->
+ 
+<a href="index.php">
+    <button type="button">Back</button>
+</a>
+
